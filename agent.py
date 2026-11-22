@@ -24,73 +24,8 @@ def fare_rules(section: str = "") -> str:
     text, _ = tool_fare_rules(section)
     return text                      # ✏️ Build 4, step 4.1, intelligence goal
 
-EXTRA_TOOLS: List[Dict[str, Any]] = [
-    {
-        "name": "next_available_day",
-        "description": (
-            "Answer the first question a cancelled or stranded Larkspur customer asks: "
-            "what is the soonest day you can actually get me out? Call it for questions "
-            "about DATES, when the customer wants to know how long they are stuck rather "
-            "than which specific flight to take. It needs the departure and arrival "
-            "airport codes, the date the customer was booked to travel, and the cabin. "
-            "It searches Larkspur inventory forward from that date and returns the "
-            "earliest date with an open seat as YYYY-MM-DD, or says plainly that there is "
-            "no open seat in the schedule it can see. It holds nothing and books nothing, "
-            "and it answers for a party of one."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "origin": {
-                    "type": "string",
-                    "description": "Departure airport, three-letter IATA code, e.g. DEN.",
-                },
-                "dest": {
-                    "type": "string",
-                    "description": "Arrival airport, three-letter IATA code, e.g. AUS.",
-                },
-                "date": {
-                    "type": "string",
-                    "description": "The disrupted travel date in ISO format, YYYY-MM-DD. Searches forward.",
-                },
-                "cabin": {
-                    "type": "string",
-                    "description": "Cabin to search: Y for main, J for first. Defaults to Y.",
-                    "enum": ["Y", "J"],
-                },
-            },
-            "required": ["origin", "dest", "date"],
-        },
-    },
-    {
-        "name": "fare_rules",
-        "description": (
-            "Return the Larkspur Customer Commitment and fare rules text behind an "
-            "entitlement decision, straight from the published Handbook excerpt. Call it "
-            "when a customer challenges an answer and wants to know the rule, or asks "
-            "why something is or is not covered, such as hotel or meal policies, so the "
-            "reply can quote the Handbook instead of paraphrasing it. It needs one section: "
-            "a number, or any words from the section title such as 'care while you wait'. "
-            "It returns that section's full text. It is reference reading, not an entitlements "
-            "decision: the policy table is still the only source of truth for what is owed."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "section": {
-                    "type": "string",
-                    "description": "Which section to read, e.g. '6', 'hotel', 'care while you wait', 'delays'.",
-                },
-            },
-            "required": ["section"],
-        },
-    },
-
-]   # ✏️ Build 2, step 2.1: schemas for the tools you add
-LOCAL_TOOLS: Dict[str, Any] = {
-    "next_available_day": next_available_day,
-    "fare_rules": fare_rules,
-}         # ✏️ Build 2, step 2.1: the functions behind them
+EXTRA_TOOLS: List[Dict[str, Any]] = []   # ✏️ Build 2, step 2.1: schemas for the tools you add
+LOCAL_TOOLS: Dict[str, Any] = {}         # ✏️ Build 2, step 2.1: the functions behind them
 
 
 def text_of(response) -> str:
@@ -155,7 +90,7 @@ def run_agent(pnr: str, last_name: str, message: str) -> str:            # ✏�
 def tool_list() -> List[Dict[str, Any]]:                   # ✏️ Build 2, step 2.2
     """Given. Exactly what Claude is offered on every turn; run.py --show-tools
     prints this list."""
-    return build_tools() + EXTRA_TOOLS
+    return build_tools() + mcp_client.tools()
 
 
 # ──────────────────────────────────────────────────────────────────────────────
