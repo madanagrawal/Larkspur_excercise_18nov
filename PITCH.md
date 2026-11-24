@@ -8,7 +8,7 @@ Number: 2,810 schema tokens per turn across 11 tools over MCP, completing all 5 
 Safety check: Two-phase commit gating irreversible rebooking confirmations behind client-minted confirmation tokens (preventing hallucinated booking writes), refusal to process refunds without human escalation, and unassisted routing of group reservation G2HL9V to human queue GRP1. 
 Next: Implement prompt caching to lower the 2,810-token per-turn schema tax, add dedicated tone guardrails and legal-threat escalation rules for abusive passengers (R8KD3F), and expand next_available_day to check multi-passenger party capacity. 
 Still broken: Abusive passengers threatening legal action (R8KD3F) receive routine voucher offers instead of immediate de-escalation or human handoff; next_available_day checks single-seat inventory only; and reaching the 8-turn ceiling terminates the loop without automated human queue dispatch.
-Lever: <cost | speed | intelligence>
+Lever: cost
 
 ## Priya asked
 
